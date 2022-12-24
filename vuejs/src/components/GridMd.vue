@@ -1,32 +1,32 @@
 <template>
   <div id="GridMd">
-          <div
-          class="grid collrows">
-          <div
-              v-for="(row, rowIndex) in grid"
-              :key="`row-${rowIndex}`"
-              class="row">
-              <div
-              v-for="(cell, collIndex) in row"
-              :key="`cell-${collIndex}`"
-              class="cell"
-              :style="{
-                  'background-color': grid[rowIndex][collIndex]
-                  ? 'rgb(10, 10, 80)'
-                  : 'rgb(90, 108, 190)'
-              }"
-              @mousedown="toggleCell(rowIndex, collIndex)">
-              </div>
-          </div>
-      </div>
-      <div class="buttons">
-          <button
-          :class="running ? 'stop' : 'start'"
-          :disabled="!ready"
-          @click="alternador()">
-          {{ running ? 'Parar' : 'Iniciar'}}
-          </button>
-      </div>
+    <div
+    class="grid collrows">
+    <div
+        v-for="(row, rowIndex) in grid"
+        :key="rowIndex"
+        class="row">
+        <div
+        v-for="(cell, collIndex) in row"
+        :key="collIndex"
+        class="cell"
+        :style="{
+            'background-color': grid[rowIndex][collIndex]
+            ? 'rgb(10, 10, 80)'
+            : 'rgb(90, 108, 190)'
+        }"
+        @mousedown="addCell(rowIndex, collIndex)">
+        </div>
+    </div>
+    </div>
+    <div class="buttons">
+        <button
+        :class="running ? 'stop' : 'start'"
+        :disabled="!ready"
+        @click="alternador()">
+        {{ running ? 'Parar' : 'Iniciar'}}
+        </button>
+    </div>
   </div>
 </template>
 
@@ -40,7 +40,7 @@ data () {
     COLS: 40,
     ROWS: 40,
     // vizinhos
-    vizinhas: [
+    neighbors_cells: [
       [-1, -1],
       [-1, 0],
       [-1, 1],
@@ -51,9 +51,7 @@ data () {
       [1, 1]
     ],
     SPEED: 200,
-    SIZE: 40,
-    ready: false,
-    generation: 0
+    ready: false
   }
 },
 mounted () {
@@ -74,48 +72,41 @@ methods: {
   alternador () {
     if (this.grid.length && this.ready) {
       this.running = !this.running
-      this.simula()
+      this.runCells()
     }
   },
-  updateSize () {
-    this.COLS = this.SIZE
-    this.ROWS = this.SIZE
-    this.seedGrid()
-  },
-  simula () {
+  runCells () {
     if (this.running) {
       const newGrid = this.grid.map(row => [...row])
       for (let row = 0; row < this.ROWS; row++) {
         for (let col = 0; col < this.COLS; col++) {
-          let neighbours = 0
-          for (let k = 0; k < this.vizinhas.length; k++) {
-            const [x, y] = this.vizinhas[k]
+          let neighbors = 0
+          for (let k = 0; k < this.neighbors_cells.length; k++) {
+            const [x, y] = this.neighbors_cells[k]
             const newRow = row + x
             const newCol = col + y
             if (newRow >= 0 && newRow < this.ROWS && newCol >= 0 && newCol < this.COLS) {
-              neighbours += this.grid[newRow][newCol]
+              neighbors += this.grid[newRow][newCol]
             }
           }
-          if (neighbours < 2 || neighbours > 3) {
+          if (neighbors < 2 || neighbors > 3) {
             newGrid[row][col] = 0
-          } else if (!this.grid[row][col] && neighbours === 3) {
+          } else if (!this.grid[row][col] && neighbors === 3) {
             newGrid[row][col] = 1
           }
         }
       }
       this.grid = newGrid
-      this.generation += 1
-      setTimeout(this.simula, this.SPEED)
+      setTimeout(this.runCells, this.SPEED)
     }
   },
   gridVazio () {
     this.ready = false
     if (!this.running) {
-      this.generation = 0
       this.grid = this.geraGrid(false)
     }
   },
-  toggleCell (row, col) {
+  addCell (row, col) {
     if (!this.running) {
       const newGrid = [...this.grid]
       newGrid[row][col] = this.grid[row][col] ? 0 : 1
@@ -123,22 +114,18 @@ methods: {
     }
     this.cellViva()
   },
-  nmRandom () {
-    return Math.floor(Math.random() * 2)
-  },
-  geraGrid (fill = false) {
+  geraGrid () {
     const grid = []
     for (let row = 0; row < this.ROWS; row++) {
       grid[row] = []
       for (let col = 0; col < this.COLS; col++) {
-        grid[row][col] = fill ? this.nmRandom() : 0
+        grid[row][col] = 0
       }
     }
     return grid
   },
   seedGrid () {
     if (!this.running) {
-      this.generation = 0
       this.grid = this.geraGrid()
       this.ready = true
     }
@@ -156,20 +143,10 @@ background: linear-gradient(159deg, rgba(2,0,36,1) 0%, rgba(9,118,121,1) 44%, rg
 font-size: 24px;
 font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
-#app {
-height: 100%;
-display: flex;
-flex-direction: column;
-align-items: center;
-}
-h1 {
-color: rgb(141, 139, 210);
-margin: 0.5rem;
-text-align: center
-}
 .grid {
 display: grid;
 margin-bottom: 0.5rem;
+margin-top: 4rem;
 margin-left: 27.5%;
 }
 .buttons {
