@@ -1,3 +1,4 @@
+<a href="https://elielclementino.github.io/game-of-life/" target="_blank">Link to the "Game of Life"<a/>
 # Game of life:
 The Game of Life is not your typical computer game. It is a cellular automaton, and was invented by Cambridge mathematician John Conway.
 
