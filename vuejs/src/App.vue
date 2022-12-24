@@ -1,0 +1,25 @@
+<template>
+  <div id="#app">
+    <GridMd />
+  </div>
+</template>
+<script>
+import GridMd from './components/GridMd.vue'
+export default {
+  name: 'App',
+  components: {
+    GridMd
+  }
+}
+</script>
+<style scoped>
+
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+}
+</style>
