@@ -18,7 +18,7 @@ def update(screen, cells, size, with_progress=False):
         color = COLOR_BACKGROUND if cells[row, col] == 0  else LIVE
         
         if cells[row, col] == 1:
-            if 2 <= alive <= 3:
+            if 2 <= alive <= 3: # 2 ou 3 vivos ressucita. 
                 updated_cells[row, col] = 1
                 if with_progress:
                     color = LIVE
