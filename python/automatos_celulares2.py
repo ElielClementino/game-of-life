@@ -68,7 +68,7 @@ def main():
             cells = update(screen, cells, GRID_CELL_SIZE, with_progress=True)
             pygame.display.update()
 
-        time.sleep(0.02)
+        time.sleep(0.2)
 
 if __name__ == '__main__':
     main()
