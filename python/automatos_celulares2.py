@@ -18,10 +18,13 @@ def update(screen, cells, size, with_progress=False):
         color = COLOR_BACKGROUND if cells[row, col] == 0  else LIVE
         
         if cells[row, col] == 1:
-            if 2 <= alive <= 3: # 2 ou 3 vivos ressucita. 
+            if 2 <= alive <= 3:
                 updated_cells[row, col] = 1
                 if with_progress:
                     color = LIVE
+            else:
+                if with_progress:
+                    color = COLOR_BACKGROUND
         else:
             if alive == 3:
                 updated_cells[row, col] = 1
@@ -65,7 +68,7 @@ def main():
             cells = update(screen, cells, GRID_CELL_SIZE, with_progress=True)
             pygame.display.update()
 
-        time.sleep(0.2)
+        time.sleep(0.02)
 
 if __name__ == '__main__':
     main()
