@@ -22,6 +22,9 @@ def update(screen, cells, size, with_progress=False):
                 updated_cells[row, col] = 1
                 if with_progress:
                     color = LIVE
+            else:
+                if with_progress:
+                    color = COLOR_BACKGROUND
         else:
             if alive == 3:
                 updated_cells[row, col] = 1
